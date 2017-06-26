@@ -13,7 +13,5 @@ MIT
 [gh-page]: http://btholt.github.io/complete-intro-to-react/
 
 
-[TIP] Build Packages using npm run build as specified in the package.json
+Build Packages using npm run build as specified in the package.json
 it runs webpack to create modules for you.
-
-[IMP] Please dont forget to do npm install to add the node modules.
