@@ -3,7 +3,7 @@ const React = require('react');
 const ShowCard = require('./ShowCard');
 const {object} = React.PropTypes
 const data = require('../data.json'); //Data Tunneling
-
+const Header = require('./Header')
 
 //JSON.stringify(obj, replacer fn, no of SPACES)
 //key is used to provide unique id
@@ -34,23 +34,18 @@ const Search = React.createClass ({
 
     }
   },
-  handleSearchTermEvent (event) {
+  handleSearchTermChange (searchTerm) {
       //Its a synthetic event not a DOM event
-      this.setState({searchTerm: event.target.value})
+      this.setState({searchTerm: searchTerm})
   },
   //Binding using on change
   render() {
       return (
         <div className='container'>
-          <header className="header">
-            <h1 className='brand'>svideo</h1>
-            <input value={this.state.searchTerm}
-                   className='search-input'
-                   type='text'
-                   placeholder='Search'
-                   onChange={this.handleSearchTermEvent}
-            />
-          </header>
+          <Header handleSearchTermChange={this.handleSearchTermChange}
+                  searchTerm={this.state.searchTerm}
+                  showSearch={true} />
+
           <div className='shows'>
             {data.shows
               .filter((show) => `${show.title} ${show.description}`

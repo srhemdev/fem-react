@@ -35,26 +35,43 @@ const {HashRouter, Route, IndexRoute, browserHistory} = require('react-router-do
 //   </HashRouter>
 // )
 
+
+
+//https://stackoverflow.com/questions/42768620/onenter-not-called-in-react-router
 const App = React.createClass ({
-  assignShow(nextState, replace) {
-      console.log('im here', nextState, replace)
-      const showArray = shows.filter((show) => show.imdbID === nextState.params.id)
-
-    //cant find the id in route hence redirect to main page
-      if(showArray.length < 1) {
-        return replace('/')
-      }
-
-      Object.assign(nextState.params, showArray[0])
-      return nextState
-  },
+  // assignShow(nextState, replace) { //dont need this since on enter is not supported
+  //     console.log('im here', nextState, replace)
+  //     const showArray = shows.filter((show) => show.imdbID === nextState.params.id)
+  //
+  //   //cant find the id in route hence redirect to main page
+  //     if(showArray.length < 1) {
+  //       return replace('/')
+  //     }
+  //
+  //     Object.assign(nextState.params, showArray[0])
+  //     return nextState
+  // },
   render () {
     return (
         <HashRouter history={browserHistory}>
           <div>
             <Route exact path='/' component={Landing}/>
             <Route path='/search' component={Search} shows={shows}/>
-            <Route path='/details/:id' component={Details} onEnter={this.assignShow}/>
+            <Route path='/details/:id' render={(nextState) => {
+                const showArray = shows.filter((show) => show.imdbID === nextState.match.params.id)
+
+                //cant find the id in route hence redirect to main page
+                if(showArray.length < 1) {
+                  return <Redirect to='/'/>
+                  //return replace('/')
+                } else {
+                  //Object.assign(nextState.match.params, showArray[0])
+                  return <Details show={showArray[0]}/>
+                  //return nextState
+                }
+
+
+            }}/>
           </div>
         </HashRouter>
     )
