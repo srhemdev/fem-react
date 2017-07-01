@@ -1,76 +1,80 @@
 /**
- * Created by hemdev on 6/25/17.
+ * React Router has been updated.
+ * Please check for updated version here:
+ * https://github.com/ReactTraining/react-router/issues/4752
  */
-//we can remove this now. global React React.DOM
-const React = require('react');
-const ReactDOM = require('react-dom');
-//const MyTitle = require('./MyTitle');
 
-//const ce = React.createElement;
-
-
-//const TitleFactory = React.createFactory(MyTitle);
-/*
-var MyFirstComponent = function () {
-  return (
-    React.createElement('div', null,
-      // React.createElement(MyTitle, null), //instance of the class
-      // React.createElement(MyTitle, null),
-      // React.createElement(MyTitle, null)
-    //Alternate way to call MyTitle rather than using React.createElement each time
-      TitleFactory(null),
-      ce(MyTitle, null),
-      React.createElement(MyTitle, null)
-    )
-  );
-};
-*/
-
-
-//Using props
-// var MyFirstComponent = function () {
-//   return (
-//     React.createElement('div', null,
-//       TitleFactory({title: 'Props are great!!', color: 'blue'}),
-//       ce(MyTitle, {title: 'Use Props everywhere', color: 'red'}),
-//       React.createElement(MyTitle, {title: 'Props are the best', color: 'green'})
-//     )
-//   );
-// };
-
-
-// var MyFirstComponent = ()  => {
-//   return (
-//     <div>
-//       <MyTitle title='Whatevs' color='rebeccapurple'/>
-//       <MyTitle title='LOL' color="papayawhip"/>
-//       <MyTitle title='OMGLOWTFBBQ' color="#f06d06"/>
-//     </div>
-//   );
-// }
-
-
-//using es6 return expression, you need to have one root component
-// const MyFirstComponent = ()  => (
-//     <div>
-//       <MyTitle title='Whatevs' color='rebeccapurple'/>
-//       <MyTitle title='LOL' color="papayawhip"/>
-//       <MyTitle title='OMGLOWTFBBQ' color="#f06d06"/>
-//     </div>
-// )
-
-const App = ()  => (
-  <div className='landing'>
-    <h1>svideo</h1>
-    <input className='search' type ='text' placeholder='Search'/>
-    <a>or Browse All</a>
-  </div>
-)
 
 // ReactDOM.render(
 //   React.createElement(MyFirstComponent),
 //   document.getElementById("app")
 // );
+const React = require('react');
+const ReactDOM = require('react-dom');
+const Layout = require('./Layout');
+const Landing = require('./Landing');
+const Search = require('./Search');
+const Details = require('./Details')
+const {shows} = require('../data.json');
+const {HashRouter, Route, IndexRoute, browserHistory} = require('react-router-dom');
+
+//BETTER
+//const {Router, Route, hashHistory} = ReactRouter;
+//OR
+// const Router = ReactRouter.Router;
+// const Route = ReactRouter.Route;
+// const hashHistory = ReactRouter.hashHistory;
+
+// const App = () => (
+//   <HashRouter history={browserHistory}>
+//     <div>
+//       <Route exact path='/' component={Landing}/>
+//       <Route path='/search' component={Search} shows={shows}/>
+//       <Route path='/details/:id' component={Details}/>
+//     </div>
+//   </HashRouter>
+// )
+
+const App = React.createClass ({
+  assignShow(nextState, replace) {
+      console.log('im here', nextState, replace)
+      const showArray = shows.filter((show) => show.imdbID === nextState.params.id)
+
+    //cant find the id in route hence redirect to main page
+      if(showArray.length < 1) {
+        return replace('/')
+      }
+
+      Object.assign(nextState.params, showArray[0])
+      return nextState
+  },
+  render () {
+    return (
+        <HashRouter history={browserHistory}>
+          <div>
+            <Route exact path='/' component={Landing}/>
+            <Route path='/search' component={Search} shows={shows}/>
+            <Route path='/details/:id' component={Details} onEnter={this.assignShow}/>
+          </div>
+        </HashRouter>
+    )
+  }
+})
+
+
+//Ideally preferred not working for now
+// const App = () => (
+//   <HashRouter history={browserHistory}>
+//     <div>
+//       <Route path='/' component={Layout}>
+//         <IndexRoute component={Landing}/>
+//         <Route path='/search' component={Search}/>
+//       </Route>
+//     </div>
+//   </HashRouter>
+// )
+
+
 
 ReactDOM.render(
   <App/>,

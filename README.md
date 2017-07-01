@@ -15,3 +15,23 @@ MIT
 
 Build Packages using npm run build as specified in the package.json
 it runs webpack to create modules for you.
+
+Run
+-npm install mocha
+-npm install chai
+-npm install babel-polyfill
+
+to run the tests
+
+Use NYC to do reporting for html, text
+
+For code coverage reports
+nyc --reporter=lcov --reporter=text --reporter=html
+--require babel-register --extension .jsx npm test
+
+
+Istanbul helps to find the code that is not being
+covered by tests
+
+Hot module replacement doesn't work with stateless
+components
