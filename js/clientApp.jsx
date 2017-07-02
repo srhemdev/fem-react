@@ -16,6 +16,9 @@ const Landing = require('./Landing');
 const Search = require('./Search');
 const Details = require('./Details')
 const {shows} = require('../data.json');
+const {store} = require('./Store');
+
+const {Provider} = require('react-redux');
 const {HashRouter, Route, IndexRoute, browserHistory} = require('react-router-dom');
 
 //BETTER
@@ -53,6 +56,7 @@ const App = React.createClass ({
   // },
   render () {
     return (
+      <Provider store={store}>
         <HashRouter history={browserHistory}>
           <div>
             <Route exact path='/' component={Landing}/>
@@ -74,6 +78,7 @@ const App = React.createClass ({
             }}/>
           </div>
         </HashRouter>
+      </Provider>
     )
   }
 })

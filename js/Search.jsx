@@ -1,9 +1,9 @@
 const React = require('react');
-
+const {object, string} = React.PropTypes
 const ShowCard = require('./ShowCard');
-const {object} = React.PropTypes
 const data = require('../data.json'); //Data Tunneling
 const Header = require('./Header')
+const {connector} = require('./Store')
 
 //JSON.stringify(obj, replacer fn, no of SPACES)
 //key is used to provide unique id
@@ -22,6 +22,10 @@ const Header = require('./Header')
 //   </div>
 // )
 
+/*<Header handleSearchTermChange={this.handleSearchTermChange}*/
+/*searchTerm={this.state.searchTerm}*/
+/*showSearch={true} />*/
+
 
 const Search = React.createClass ({
   getInitialState (props) {
@@ -34,23 +38,26 @@ const Search = React.createClass ({
 
     }
   },
-  handleSearchTermChange (searchTerm) {
-      //Its a synthetic event not a DOM event
-      this.setState({searchTerm: searchTerm})
+  propTypes: {
+    searchTerm:string
   },
+  // handleSearchTermChange (searchTerm) {
+  //     //Its a synthetic event not a DOM event
+  //     this.setState({searchTerm: searchTerm})
+  // },
   //Binding using on change
   render() {
       return (
         <div className='container'>
-          <Header handleSearchTermChange={this.handleSearchTermChange}
-                  searchTerm={this.state.searchTerm}
-                  showSearch={true} />
+
+          <Header showSearch={true} />
+
 
           <div className='shows'>
             {data.shows
               .filter((show) => `${show.title} ${show.description}`
                                   .toUpperCase()
-                                  .indexOf(this.state.searchTerm.toUpperCase()) >= 0)
+                                  .indexOf(this.props.searchTerm.toUpperCase()) >= 0)
               .map((s) => (
               //<ShowCard show={s} key={s.imdbID}/>
               <ShowCard {...s} key={s.imdbID}/>
@@ -80,4 +87,4 @@ const Search = React.createClass ({
 //   }
 // }
 
-module.exports = Search;
+module.exports = connector(Search);
