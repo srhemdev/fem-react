@@ -1,6 +1,7 @@
 const React = require('react')
 const {object} = React.PropTypes
 const Header = require('./Header')
+const {connector} = require('./Store')
 
 // class Details extends React.Component {
 //   render() {
@@ -43,9 +44,18 @@ const Details = React.createClass ({
   propTypes: {
     route: object
   },
+  assignShow(id) {
+    const showArray = this.props.shows.filter((show) => show.imdbID === id)
+    return showArray[0]
+  },
   render() {
-    const params = this.props.show || {}
-    const {title, description, year, poster, trailer} = params
+    // const params = this.props.show || {}
+    // const {title, description, year, poster, trailer} = params
+    //redux gets this
+    //const {title, description, year, poster, trailer} = this.props.shows[this.props.params.id]
+    console.log(this.props)
+    const {title, description, year, poster, trailer} = this.assignShow(this.props.match.params.id)
+
     return (<div className='container'>
       <Header/>
       <div className='video-info'>
@@ -63,4 +73,4 @@ const Details = React.createClass ({
 })
 
 
-module.exports = Details;
+module.exports = connector(Details);

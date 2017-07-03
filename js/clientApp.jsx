@@ -10,16 +10,24 @@
 //   document.getElementById("app")
 // );
 const React = require('react');
-const ReactDOM = require('react-dom');
+//const ReactDOM = require('react-dom');
 const Layout = require('./Layout');
 const Landing = require('./Landing');
 const Search = require('./Search');
 const Details = require('./Details')
-const {shows} = require('../data.json');
+//const {shows} = require('../data.json');
 const {store} = require('./Store');
 
 const {Provider} = require('react-redux');
 const {HashRouter, Route, IndexRoute, browserHistory} = require('react-router-dom');
+
+const myRoutes = ()  => (
+    <div>
+      <Route exact path='/' component={Landing}/>
+      <Route path='/search' component={Search} /*shows={shows}*//>
+      <Route path='/details/:id' component={Details}/>
+    </div>
+)
 
 //BETTER
 //const {Router, Route, hashHistory} = ReactRouter;
@@ -54,35 +62,35 @@ const App = React.createClass ({
   //     Object.assign(nextState.params, showArray[0])
   //     return nextState
   // },
+
+  /*<Route path='/details/:id' render={(nextState) => {
+   // const showArray = shows.filter((show) => show.imdbID === nextState.match.params.id)
+   //
+   // //cant find the id in route hence redirect to main page
+   // if(showArray.length < 1) {
+   //   return <Redirect to='/'/>
+   //   //return replace('/')
+   // } else {
+   //Object.assign(nextState.match.params, showArray[0])
+   //return <Details show={showArray[0]}/>
+   return <Details/>
+   //   //return nextState
+   // }
+
+
+   }}/>*/
   render () {
     return (
       <Provider store={store}>
         <HashRouter history={browserHistory}>
-          <div>
-            <Route exact path='/' component={Landing}/>
-            <Route path='/search' component={Search} shows={shows}/>
-            <Route path='/details/:id' render={(nextState) => {
-                const showArray = shows.filter((show) => show.imdbID === nextState.match.params.id)
-
-                //cant find the id in route hence redirect to main page
-                if(showArray.length < 1) {
-                  return <Redirect to='/'/>
-                  //return replace('/')
-                } else {
-                  //Object.assign(nextState.match.params, showArray[0])
-                  return <Details show={showArray[0]}/>
-                  //return nextState
-                }
-
-
-            }}/>
-          </div>
+          {myRoutes()}
         </HashRouter>
       </Provider>
     )
   }
 })
 
+App.Routes = myRoutes
 
 //Ideally preferred not working for now
 // const App = () => (
@@ -96,9 +104,8 @@ const App = React.createClass ({
 //   </HashRouter>
 // )
 
+//Split out app and what renders the app
+// so that app can be render on the server
 
-
-ReactDOM.render(
-  <App/>,
-  document.getElementById("app")
-)
+//no longer our entry just a module
+module.exports = App;

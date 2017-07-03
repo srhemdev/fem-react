@@ -1,5 +1,5 @@
 const React = require('react');
-const {object, string} = React.PropTypes
+const {object, string, arrayOf} = React.PropTypes
 const ShowCard = require('./ShowCard');
 const data = require('../data.json'); //Data Tunneling
 const Header = require('./Header')
@@ -39,6 +39,7 @@ const Search = React.createClass ({
     }
   },
   propTypes: {
+    shows: arrayOf(object),
     searchTerm:string
   },
   // handleSearchTermChange (searchTerm) {
@@ -54,7 +55,7 @@ const Search = React.createClass ({
 
 
           <div className='shows'>
-            {data.shows
+            {this.props.shows
               .filter((show) => `${show.title} ${show.description}`
                                   .toUpperCase()
                                   .indexOf(this.props.searchTerm.toUpperCase()) >= 0)

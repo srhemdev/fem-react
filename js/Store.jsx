@@ -1,11 +1,13 @@
 const redux = require('redux')
 const reactRedux = require('react-redux')
+const {shows} = require('../data.json')
 
 //Make all your actions constants so that if you need to change your constant later,
 //you just need to change the text.
 const SET_SEARCH_TERM = 'setSearchTerm'
 const initialState = {
-  searchTerm: ''
+  searchTerm: '',
+  shows: shows
 }
 
 const rootReducer = (state=initialState, action) => {
@@ -27,7 +29,10 @@ const reduceSearchTerm = (state, action) => {
 const store = redux.createStore(rootReducer)
 
 //state of redux store
-const mapStateToProps = (state) => ({searchTerm: state.searchTerm})
+const mapStateToProps = (state) => ({
+  searchTerm: state.searchTerm,
+  shows: state.shows
+})
 
 const mapDispatchToProps = (dispatch) => {
   return {

@@ -35,3 +35,7 @@ covered by tests
 
 Hot module replacement doesn't work with stateless
 components
+
+
+Universal Rendering ( also known as server side rendering, isomorphic
+ rendering)
